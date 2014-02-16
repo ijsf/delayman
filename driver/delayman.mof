@@ -1,0 +1,24 @@
+#PRAGMA AUTORECOVER
+
+[Dynamic, Provider("WMIProv"),
+ WMI,
+ Description("DelayMan driver control"),
+ guid("{43ED9BC0-4AF2-11DE-8A39-0800200C9A66}"),
+ locale("MS\\0x409")]
+class DelayManWMI
+{
+	[key, read]
+	string InstanceName;
+	
+	[read]
+	boolean Active;
+
+	[WmiDataId(1),
+	 read,
+	 write,
+	 Description("Timer delay in seconds")]
+	uint32 timerDelay;
+	
+	[Implemented, WmiMethodId(1)]
+	void stopShutdown();
+};

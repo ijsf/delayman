@@ -1,0 +1,81 @@
+DelayMan
+    
+    This package consists of a filter driver that adds new functionality to the
+    NT shutdown process. It listens for system buttons events, such as the
+    closing of a laptop lid, and delays the immediate shutdown process with a
+    configurable amount of time.
+    
+    To achieve the aforementioned functionality, the filter driver is installed
+    as lower filter to a ACPI system button device (e.g. "ACPI Lid"). As a
+    lower filter to this device, it is capable of intercepting the I/O Request
+    Packets (IRPs) that are sent by the NT power manager. Whenever a system
+    button event is detected, the completion of the appropriate IRP would
+    normally "travel" back to the power manager which would initiate the system
+    shutdown process. This driver makes sure that the IRP completion is delayed
+    by a configurable amount of time.
+    
+    During installation, the INF instructs the driver to install itself as a
+    root-enumerated device and service (Root\DelayMan). A co-installer is
+    used to enumerate the ACPI system button devices (specifically the "ACPI
+    Lid" device) and to install the DelayMan driver as lower filter to these
+    devices.
+
+    The driver is built upon the KMDF framework (version 1.7).
+
+Files
+
+    coinstaller     DelayMan co-installer C source
+    driver          DelayMan filter driver C source
+    tool            DelayMan system tray tool
+    misc            Miscellaneous files
+    obj             Output directory
+    
+    devcon.exe      Microsoft DevCon device manager utility
+    install.bat     Builds and installs the driver on the system
+    uninstall.bat   Uninstalls the driver from the system
+    sign.bat        Generates and installs a test-signing certificate
+    clean.bat       Removes any build files
+
+    README.txt      Information about the driver
+    LICENSE.txt     License details for the driver
+
+Installation
+
+    This driver is not WHQL signed and may require test signing for newer
+    operating systems.
+
+    * Make sure you're in the WDK Build Environment
+
+    * Run the sign.bat file to generate and install a test-signing certificate.
+
+      This batch file generates a test-signing certificate and installs it
+      on the system.
+
+    * Change the configuration variables in the install.bat file.
+
+    * Use the install.bat file to build, prepare and install the driver kit.
+
+      This batch file builds the entire driver kit. It then generates a catalog
+      for the driver (a signed catalog file is required to install on newer
+      versions of Windows). The catalog is signed using the certificate that
+      was generated and installed earlier. Finally, it will install the driver
+      using the supplied Microsoft DevCon.exe utility.
+
+      For more information on how to sign drivers, refer to this MSDN article:
+        http://msdn.microsoft.com/en-us/library/aa906247.aspx
+
+    For x86-64 systems:
+        Make sure that test signing is enabled before attempting to install the
+        driver:
+            bcdedit -set TESTSIGNING ON
+            
+    For easy debug log retrieval;
+        http://alter.org.ua/soft/win/dbgdump/
+
+License
+
+    This driver is licensed under the New BSD License.
+    For more information, refer to the accompanied LICENSE.txt file.
+
+    Bastage Inc.
+        C.E. Etheredge ( ijsf@gmx-topmail.de | http://ijs.mtasa.com/ )

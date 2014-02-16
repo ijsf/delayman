@@ -1,0 +1,15 @@
+TARGETNAME = delayman
+TARGETTYPE = DRIVER
+TARGETPATH = ..\obj
+
+USE_WDF_STATIC =	1
+KMDF_VERSION =		1
+
+NTTARGETFILE0 =	$(OBJ_PATH)\$(O)\delayman.bmf
+
+MISCFILES =		$(NTTARGETFILES)
+TARGETLIBS =	$(TARGETLIBS)
+
+SOURCES =		delayman.c \
+				delayman.rc \
+				wmi.c

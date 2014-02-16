@@ -1,0 +1,15 @@
+TARGETNAME = codelayman
+TARGETTYPE = DYNLINK
+USE_MSVCRT = 1
+TARGETPATH = ..\obj
+
+DLLBASE = 0x2000000
+MSC_WARNING_LEVEL = /W0
+
+INCLUDES =		$(DDK_INC_PATH)
+TARGETLIBS =	$(DDK_LIB_PATH)\setupapi.lib \
+				$(SDK_LIB_PATH)\kernel32.lib
+ 
+SOURCES =		codelayman.c \
+				codelayman.rc
+

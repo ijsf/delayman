@@ -1,0 +1,83 @@
+;
+; Delayman INF driver installation file
+;
+[Version]
+DriverVer = 05/27/2009, 1.3.3.8
+signature = "$WINDOWS NT$"
+Class = System
+ClassGuid = {4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider = %Mfg%
+CatalogFile = DelayMan.cat
+
+[SourceDisksNames]
+1 = %DiskId%
+
+[SourceDisksFiles]
+delayman.sys = 1
+
+[DestinationDirs]
+DefaultDestDir = 12                    ; system32\drivers
+DelayMan.CoInstaller.CopyFiles = 11    ; system32
+
+[Manufacturer]
+%Mfg% = Bastage
+
+[Bastage]
+%DeviceDesc% = DelayMan, Root\DelayMan
+
+;
+; DelayMan is a driver that is root-enumerated and installed as filter to
+; the Acpi Lid driver. The root-enumeration is required in order to let the
+; driver run on it's own.
+;
+[DelayMan.NT]
+CopyFiles = DelayMan.Copy
+
+[DelayMan.Copy]
+delayman.sys
+
+;
+; DelayMan driver service
+;
+[DelayMan.NT.Services]
+AddService = DelayMan, 2, DelayMan.Service
+
+[DelayMan.Service]
+DisplayName    = %SvcDesc%
+ServiceType    = 1                ; SERVICE_KERNEL_DRIVER
+StartType      = 3                ; SERVICE_DEMAND_START
+ErrorControl   = 1                ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\delayman.sys
+
+[Strings]
+Mfg = "Bastage Inc."
+DeviceDesc = "ACPI DelayMan Filter"
+SvcDesc = "ACPI DelayMan Filter Service"
+DiskId = "Install disk"
+
+;
+; WDF and DelayMan co-installers
+;
+[DelayMan.NT.CoInstallers]
+AddReg          = DelayMan.CoInstaller.AddReg
+CopyFiles       = DelayMan.CoInstaller.CopyFiles
+
+[DelayMan.CoInstaller.AddReg]
+HKR,,CoInstallers32,0x00010000,					\
+	"WdfCoInstaller01007.dll,WdfCoInstaller",	\
+	"codelayman.dll,CoInstFilter"
+
+[DelayMan.CoInstaller.CopyFiles]
+WdfCoInstaller01007.dll
+codelayman.dll
+
+[SourceDisksFiles]
+WdfCoInstaller01007.dll = 1
+codelayman.dll = 1
+
+[DelayMan.NT.Wdf]
+KmdfService = DelayMan, DelayMan_wdfsect
+
+[DelayMan_wdfsect]
+KmdfLibraryVersion = 1.7
+

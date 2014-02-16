@@ -1,0 +1,4 @@
+LIBRARY CODELAYMAN
+
+EXPORTS   
+	CoInstFilter
